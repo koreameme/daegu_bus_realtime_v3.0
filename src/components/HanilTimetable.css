@@ -444,3 +444,44 @@
 .vehicle-input::placeholder {
     color: #cbd5e1;
 }
+
+.form-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.input-group {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.input-group:focus-within {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.text-input {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    color: #1e293b;
+    outline: none;
+    text-align: center;
+}
+
+.text-input::placeholder {
+    color: #cbd5e1;
+}
+
+@media (max-width: 480px) {
+    .form-row-2col {
+        grid-template-columns: 1fr;
+    }
+}
