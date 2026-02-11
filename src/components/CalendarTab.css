@@ -208,4 +208,8 @@
     .day-number {
         font-size: 0.75rem;
     }
+
+    .calendar-header h1 {
+        font-size: 1.25rem;
+    }
 }
