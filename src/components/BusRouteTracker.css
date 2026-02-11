@@ -1,0 +1,218 @@
+.bus-route-tracker-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.bus-route-tracker-container * {
+    box-sizing: border-box;
+}
+
+.bus-route-tracker-container .search-card,
+.bus-route-tracker-container .result-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.bus-route-tracker-container .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.bus-route-tracker-container .header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bus-route-tracker-container .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #4f46e5;
+    flex-shrink: 0;
+}
+
+.bus-route-tracker-container .result-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bus-route-tracker-container .search-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.bus-route-tracker-container .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.bus-route-tracker-container .form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.bus-route-tracker-container .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.bus-route-tracker-container .search-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.bus-route-tracker-container .button-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.bus-route-tracker-container button {
+    flex: 1;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.bus-route-tracker-container .search-btn {
+    background-color: #4f46e5;
+    color: white;
+}
+
+.bus-route-tracker-container .search-btn:hover:not(:disabled) {
+    background-color: #4338ca;
+}
+
+.bus-route-tracker-container .reset-btn {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.bus-route-tracker-container .reset-btn:hover {
+    background-color: #d1d5db;
+}
+
+/* Recent Search Tags */
+.bus-route-tracker-container .recent-searches {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.bus-route-tracker-container .recent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.bus-route-tracker-container .clear-history {
+    background: none;
+    color: #9ca3af;
+    padding: 0;
+    font-size: 0.75rem;
+    width: auto;
+    justify-content: flex-end;
+}
+
+.bus-route-tracker-container .clear-history:hover {
+    color: #ef4444;
+    background: none;
+}
+
+.bus-route-tracker-container .recent-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.bus-route-tracker-container .recent-tag {
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    flex: 0 0 auto;
+    width: auto;
+}
+
+.bus-route-tracker-container .recent-tag:hover {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+/* Animations */
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .bus-route-tracker-container .search-card,
+    .bus-route-tracker-container .result-card {
+        padding: 1rem;
+    }
+
+    .bus-route-tracker-container .header h1 {
+        font-size: 1.25rem;
+    }
+
+    .bus-route-tracker-container .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .bus-route-tracker-container .result-title {
+        font-size: 1.1rem;
+    }
+}

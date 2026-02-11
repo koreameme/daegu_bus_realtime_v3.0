@@ -1,0 +1,98 @@
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.about-container * {
+    box-sizing: border-box;
+}
+
+.about-container .info-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-container .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-container .header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.about-container .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #4f46e5;
+    flex-shrink: 0;
+}
+
+.about-container .app-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #4f46e5;
+    /* Primary color */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.about-container .description {
+    line-height: 1.6;
+    color: #4b5563;
+    margin-bottom: 1rem;
+}
+
+.about-container .version {
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+
+.about-container .feature-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.about-container .feature-list {
+    padding-left: 1.25rem;
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+.about-container .feature-list li {
+    margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .about-container .info-card {
+        padding: 1rem;
+    }
+
+    .about-container .header h1 {
+        font-size: 1.25rem;
+    }
+
+    .about-container .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
