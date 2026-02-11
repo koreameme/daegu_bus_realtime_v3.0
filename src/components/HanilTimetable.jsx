@@ -10,6 +10,7 @@ const HanilTimetable = () => {
     const [selectedNumber, setSelectedNumber] = useState('');
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
     const [selectedShift, setSelectedShift] = useState('morning'); // 'morning' or 'afternoon'
+    const [vehicleNumber, setVehicleNumber] = useState('');
     const [searchResult, setSearchResult] = useState(null);
 
     // Get unique routes
@@ -96,11 +97,27 @@ const HanilTimetable = () => {
         setSelectedNumber('');
         setSelectedDate(new Date().toISOString().split('T')[0]);
         setSelectedShift('morning');
+        setVehicleNumber('');
         setSearchResult(null);
     };
 
     const handleAddToCalendar = () => {
         if (!searchResult || !selectedDate) return;
+
+        // Vehicle Number Validation
+        if (vehicleNumber.length !== 2) {
+            alert('차량번호 뒷자리 2자리를 입력해주세요.');
+            return;
+        }
+
+        const existingSchedules = JSON.parse(localStorage.getItem('busSchedules') || '[]');
+
+        // Duplicate Date Check
+        const isDuplicate = existingSchedules.some(s => s.date === selectedDate);
+        if (isDuplicate) {
+            alert('이미 해당 날짜에 일정이 저장되어 있습니다.');
+            return;
+        }
 
         const scheduleEntry = {
             id: Date.now(),
@@ -109,17 +126,17 @@ const HanilTimetable = () => {
             dayType: selectedDay,
             sequence: selectedNumber,
             shift: selectedShift,
+            vehicleNumber: `19${vehicleNumber}`,
             startTime: selectedShift === 'morning' ? searchResult.detail.오전근무 : searchResult.detail.교대시간,
             endTime: selectedShift === 'morning' ? searchResult.detail.교대시간 : searchResult.detail.오후근무,
             fullDetail: searchResult.detail
         };
 
-        const existingSchedules = JSON.parse(localStorage.getItem('busSchedules') || '[]');
         const updatedSchedules = [...existingSchedules, scheduleEntry];
         localStorage.setItem('busSchedules', JSON.stringify(updatedSchedules));
         window.dispatchEvent(new Event('busScheduleUpdated'));
 
-        alert(`${selectedDate} ${selectedShift === 'morning' ? '오전반' : '오후반'}으로 달력에 추가되었습니다!`);
+        alert(`${selectedDate} ${selectedShift === 'morning' ? '오전반' : '오후반'} (19${vehicleNumber}호)으로 달력에 추가되었습니다!`);
     };
 
     return (
@@ -238,6 +255,26 @@ const HanilTimetable = () => {
                                     </button>
                                 </div>
                             </div>
+
+                            <div className="form-group">
+                                <label>차량 번호</label>
+                                <div className="vehicle-input-group">
+                                    <span className="prefix">19</span>
+                                    <input
+                                        type="text"
+                                        value={vehicleNumber}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/[^0-9]/g, '');
+                                            if (val.length <= 2) setVehicleNumber(val);
+                                        }}
+                                        placeholder="XX"
+                                        className="vehicle-input"
+                                    />
+                                    <span className="suffix">호</span>
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <div className="action-group">

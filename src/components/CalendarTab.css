@@ -155,6 +155,12 @@
     font-size: 0.75rem;
 }
 
+.event-vehicle {
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
 .event-time {
     font-size: 0.7rem;
     opacity: 0.8;

@@ -64,6 +64,7 @@ const CalendarTab = () => {
                             <div className="event-info">
                                 <span className="event-route">{s.route}번</span>
                                 <span className="event-seq">{s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번</span>
+                                {s.vehicleNumber && <span className="event-vehicle">{s.vehicleNumber}호</span>}
                                 <span className="event-time-display">{s.startTime}~{s.endTime}</span>
                             </div>
                             <button className="del-btn" onClick={() => deleteSchedule(s.id)}>
