@@ -1,7 +1,7 @@
 {
-  "name": "hanil-bus-daegu",
-  "private": true,
   "version": "1.0.0",
+  "name": "hanil-bus-daegu",
+  "homepage": "https://koreameme.github.io/hanil-bus-daegu/",
   "type": "module",
   "scripts": {
     "dev": "vite",
