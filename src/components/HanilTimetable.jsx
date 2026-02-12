@@ -234,7 +234,37 @@ const HanilTimetable = () => {
             </div>
 
             <div className="content-wrapper">
-                {/* 1. Save to Calendar Section (Persistent) */}
+                {/* 1. Schedule Result Section (Time Info) */}
+                {searchResult && (
+                    <div className="result-card animate-fadeIn">
+                        <div className="header">
+                            <Clock style={{ width: '1.5rem', height: '1.5rem', color: '#4f46e5' }} />
+                            <h2 className="result-title">근무 시간 정보</h2>
+                        </div>
+                        <div className="info-cards">
+                            <div className={`info-card blue ${selectedShift === 'morning' ? 'highlight' : ''}`}>
+                                <div className="info-card-label">오전 근무</div>
+                                <div className="info-card-time">{searchResult.detail.오전근무}</div>
+                            </div>
+                            <div className="info-card amber highlight">
+                                <div className="info-card-label">교대 시간</div>
+                                <div className="info-card-time">{searchResult.detail.교대시간}</div>
+                            </div>
+                            <div className={`info-card purple ${selectedShift === 'afternoon' ? 'highlight' : ''}`}>
+                                <div className="info-card-label">오후 근무</div>
+                                <div className="info-card-time">{searchResult.detail.오후근무}</div>
+                            </div>
+                        </div>
+
+                        <div className="meta-info">
+                            <span>노선:</span> {selectedRoute}번 |
+                            <span>요일:</span> {selectedDay} |
+                            <span>순번:</span> {selectedNumber}번
+                        </div>
+                    </div>
+                )}
+
+                {/* 2. Save to Calendar Section (Persistent) */}
                 <div className="save-calendar-card">
                     <div className="header">
                         <Calendar style={{ width: '1.5rem', height: '1.5rem', color: '#f59e0b' }} />
@@ -332,71 +362,40 @@ const HanilTimetable = () => {
                     </div>
                 </div>
 
-                {/* 2. Schedule Result Section */}
-                {searchResult && (
-                    <div className="result-section">
-                        <div className="result-card animate-fadeIn">
-                            <div className="header">
-                                <Clock style={{ width: '1.5rem', height: '1.5rem', color: '#4f46e5' }} />
-                                <h2 className="result-title">근무 시간 정보</h2>
-                            </div>
-                            <div className="info-cards">
-                                <div className={`info-card blue ${selectedShift === 'morning' ? 'highlight' : ''}`}>
-                                    <div className="info-card-label">오전 근무</div>
-                                    <div className="info-card-time">{searchResult.detail.오전근무}</div>
-                                </div>
-                                <div className="info-card amber highlight">
-                                    <div className="info-card-label">교대 시간</div>
-                                    <div className="info-card-time">{searchResult.detail.교대시간}</div>
-                                </div>
-                                <div className={`info-card purple ${selectedShift === 'afternoon' ? 'highlight' : ''}`}>
-                                    <div className="info-card-label">오후 근무</div>
-                                    <div className="info-card-time">{searchResult.detail.오후근무}</div>
-                                </div>
-                            </div>
-
-                            <div className="meta-info">
-                                <span>노선:</span> {selectedRoute}번 |
-                                <span>요일:</span> {selectedDay} |
-                                <span>순번:</span> {selectedNumber}번
-                            </div>
+                {/* 3. Detailed Timetable Section */}
+                {searchResult && searchResult.detailedInfo && (
+                    <div className="detail-table-card animate-fadeIn">
+                        <div className="header">
+                            <MapPin style={{ width: '1.5rem', height: '1.5rem', color: '#10b981' }} />
+                            <h2 className="result-title">상세 시간표</h2>
                         </div>
-
-                        {searchResult.detailedInfo && (
-                            <div className="detail-table-card animate-fadeIn">
-                                <div className="header">
-                                    <MapPin style={{ width: '1.5rem', height: '1.5rem', color: '#10b981' }} />
-                                    <h2 className="result-title">상세 시간표</h2>
-                                </div>
-                                <div className="table-wrapper">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>회차</th>
-                                                {searchResult.detailedInfo.stops.map((stop, idx) => (
-                                                    <th key={idx}>{stop}</th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {searchResult.detailedInfo.turns.map((turn, idx) => (
-                                                <tr key={idx}>
-                                                    <td className="turn-number">{turn.번호}회</td>
-                                                    {turn.시간.map((time, tIdx) => (
-                                                        <td key={tIdx} className={`time-cell ${time === '-' ? 'empty' : ''}`}>
-                                                            {time}
-                                                        </td>
-                                                    ))}
-                                                </tr>
+                        <div className="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>회차</th>
+                                        {searchResult.detailedInfo.stops.map((stop, idx) => (
+                                            <th key={idx}>{stop}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {searchResult.detailedInfo.turns.map((turn, idx) => (
+                                        <tr key={idx}>
+                                            <td className="turn-number">{turn.번호}회</td>
+                                            {turn.시간.map((time, tIdx) => (
+                                                <td key={tIdx} className={`time-cell ${time === '-' ? 'empty' : ''}`}>
+                                                    {time}
+                                                </td>
                                             ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div className="notice">
-                                    <span>💡 안내:</span> 각 회차별로 정류장을 거쳐가는 시간이 표시됩니다.
-                                </div>
-                            </div>
-                        )}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="notice">
+                            <span>💡 안내:</span> 각 회차별로 정류장을 거쳐가는 시간이 표시됩니다.
+                        </div>
                     </div>
                 )}
             </div>
