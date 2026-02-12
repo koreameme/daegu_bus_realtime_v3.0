@@ -13,7 +13,7 @@ const AboutPage = () => {
                 </div>
                 <h2 className="app-title">
                     <Bus style={{ width: '1.5rem', height: '1.5rem', verticalAlign: 'middle', marginRight: '0.5rem' }} />
-                    대구 버스 리얼타임
+                    대구버스(한일)
                 </h2>
                 <p className="description">
                     이 앱은 대구광역시의 시내버스 실시간 운행 정보를 제공합니다.

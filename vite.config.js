@@ -12,20 +12,71 @@ export default defineConfig({
             injectRegister: 'auto',
             includeAssets: ['favicon.ico', 'icon.svg'],
             manifest: {
-                name: '한일 버스 대구',
-                short_name: '한일버스',
+                name: '대구버스(한일)',
+                short_name: '대구버스',
+                id: '/hanil-bus-daegu/',
                 description: '대구 한일 버스 실시간 운행 정보 및 시간표',
+                orientation: 'portrait',
                 theme_color: '#007aff',
                 background_color: '#ffffff',
                 display: 'standalone',
+                display_override: ['standalone', 'window-controls-overlay'],
+                dir: 'ltr',
+                categories: ['transportation', 'utilities'],
                 icons: [
                     {
                         src: 'icon.svg',
-                        sizes: '192x192 512x512',
+                        sizes: 'any',
                         type: 'image/svg+xml',
-                        purpose: 'any maskable'
+                        purpose: 'maskable'
+                    },
+                    {
+                        src: 'pwa-192.png',
+                        sizes: '192x192',
+                        type: 'image/png',
+                        purpose: 'any'
+                    },
+                    {
+                        src: 'pwa-512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                        purpose: 'any'
+                    }
+                ],
+                screenshots: [
+                    {
+                        src: 'screenshots/timetable.png',
+                        sizes: '1080x2340',
+                        type: 'image/png',
+                        form_factor: 'narrow',
+                        label: '시간표 화면'
+                    },
+                    {
+                        src: 'screenshots/calendar.png',
+                        sizes: '1080x2340',
+                        type: 'image/png',
+                        form_factor: 'narrow',
+                        label: '근무 달력 화면'
+                    },
+                    {
+                        src: 'screenshots/realtime.png',
+                        sizes: '1080x2340',
+                        type: 'image/png',
+                        form_factor: 'narrow',
+                        label: '실시간 버스 위치 화면'
+                    },
+
+                    {
+                        src: 'screenshots/desktop.png',
+                        sizes: '1920x1080',
+                        type: 'image/png',
+                        form_factor: 'wide',
+                        label: 'PC 버전 화면'
                     }
                 ]
+
+
+
             },
             workbox: {
                 globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
