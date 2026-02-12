@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Trash2, Calendar, FileDown, List, Grid, Bus } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import './CalendarTab.css';
@@ -228,7 +229,12 @@ const CalendarTab = () => {
                                     </div>
                                     <div className="list-events-container">
                                         {events.map(s => (
-                                            <div key={s.id} className={`list-event-card ${s.shift}`}>
+                                            <div
+                                                key={s.id}
+                                                className={`list-event-card ${s.shift}`}
+                                                onClick={() => setSelectedSchedule(s)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
                                                 <div className="list-card-header">
                                                     {s.shift === 'off' ? (
                                                         <span className="route-badge" style={{ color: '#4b5563' }}>휴무</span>
@@ -269,7 +275,13 @@ const CalendarTab = () => {
                                                         </div>
                                                     )}
                                                 </div>
-                                                <button className="list-del-btn" onClick={() => deleteSchedule(s.id)}>
+                                                <button
+                                                    className="list-del-btn"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation(); // Prevent modal opening
+                                                        deleteSchedule(s.id);
+                                                    }}
+                                                >
                                                     <Trash2 size={16} />
                                                 </button>
                                             </div>
@@ -288,8 +300,8 @@ const CalendarTab = () => {
                     <p>저장된 근무 일정이 없습니다.<br />시간표 탭에서 일정을 추가해보세요!</p>
                 </div>
             )}
-            {/* Schedule Detail Modal */}
-            {selectedSchedule && (
+            {/* Schedule Detail Modal - Portal to body */}
+            {selectedSchedule && createPortal(
                 <div className="modal-overlay" onClick={() => setSelectedSchedule(null)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
@@ -358,7 +370,8 @@ const CalendarTab = () => {
                             <button className="modal-close-btn" onClick={() => setSelectedSchedule(null)}>닫기</button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -3,8 +3,6 @@
     margin: 0 auto;
     padding: 1rem;
     padding-bottom: 100px;
-    position: relative;
-    /* For absolute modal containment */
 }
 
 .calendar-header {
@@ -330,6 +328,14 @@
     border-left: 4px solid transparent;
     background: #f8fafc;
     position: relative;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.list-event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 10;
 }
 
 .list-event-card.morning {
@@ -490,14 +496,12 @@
 
 /* Modal Styles */
 .modal-overlay {
-    position: absolute;
-    /* Changed from fixed to absolute */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
-    /* Slightly lighter backdrop */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -505,7 +509,6 @@
     padding: 0.75rem;
     backdrop-filter: blur(2px);
     animation: fadeIn 0.2s ease-out;
-    border-radius: 1rem;
 }
 
 .modal-content {

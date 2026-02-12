@@ -111,6 +111,26 @@ const HanilTimetable = () => {
             return;
         }
 
+        // Validate selection for work schedule
+        if (selectedShift !== 'off') {
+            if (!selectedRoute) {
+                alert('노선을 선택해주세요.');
+                return;
+            }
+            if (!selectedDay) {
+                alert('요일을 선택해주세요.');
+                return;
+            }
+            if (!selectedNumber) {
+                alert('순번을 선택해주세요.');
+                return;
+            }
+            if (!searchResult) {
+                alert('조회하기 버튼을 눌러 시간표를 먼저 확인해주세요.');
+                return;
+            }
+        }
+
         // Vehicle Number & Relief Driver Validation (Only if NOT 'Day Off')
         if (selectedShift !== 'off') {
             if (vehicleNumber.length !== 2) {
