@@ -162,7 +162,10 @@ const CalendarTab = () => {
                                                     ) : (
                                                         <>
                                                             <span className="event-route">{s.route}번</span>
-                                                            <span className="event-seq">{s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번 ({s.dayType})</span>
+                                                            <span className="event-seq">
+                                                                {s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번
+                                                                ({s.dayType === '평일' ? '평' : s.dayType === '토요일/방학' ? '토' : s.dayType === '휴일' ? '휴' : s.dayType})
+                                                            </span>
                                                             {s.vehicleNumber && (
                                                                 <span className="event-vehicle">
                                                                     {s.vehicleNumber}호
