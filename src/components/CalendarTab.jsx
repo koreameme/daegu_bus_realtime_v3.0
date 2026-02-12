@@ -7,6 +7,7 @@ const CalendarTab = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [schedules, setSchedules] = useState([]);
     const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list'
+    const [selectedSchedule, setSelectedSchedule] = useState(null); // For detail modal
 
     useEffect(() => {
         const loadSchedules = () => {
@@ -155,7 +156,12 @@ const CalendarTab = () => {
                                     <span className="day-number">{d}</span>
                                     <div className="day-events">
                                         {daySchedules.map(s => (
-                                            <div key={s.id} className={`event-tag ${s.shift}`}>
+                                            <div
+                                                key={s.id}
+                                                className={`event-tag ${s.shift}`}
+                                                onClick={() => setSelectedSchedule(s)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
                                                 <div className="event-info">
                                                     {s.shift === 'off' ? (
                                                         <span className="event-route">휴무</span>
@@ -176,7 +182,6 @@ const CalendarTab = () => {
                                                         </>
                                                     )}
                                                 </div>
-                                                {/* 삭제 버튼은 캘린더 형식에서 보이지 않도록 제거 */}
                                             </div>
                                         ))}
                                     </div>
@@ -281,6 +286,78 @@ const CalendarTab = () => {
                 <div className="no-data">
                     <Bus size={48} className="empty-icon" />
                     <p>저장된 근무 일정이 없습니다.<br />시간표 탭에서 일정을 추가해보세요!</p>
+                </div>
+            )}
+            {/* Schedule Detail Modal */}
+            {selectedSchedule && (
+                <div className="modal-overlay" onClick={() => setSelectedSchedule(null)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <div className="modal-title-group">
+                                <Bus className="modal-bus-icon" />
+                                <h2>근무 상세 정보</h2>
+                            </div>
+                            <button className="close-btn" onClick={() => setSelectedSchedule(null)}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="detail-row">
+                                <span className="label">날짜:</span>
+                                <span className="value">
+                                    {new Date(selectedSchedule.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                                </span>
+                            </div>
+                            <div className="detail-row">
+                                <span className="label">구분:</span>
+                                <span className={`value-badge ${selectedSchedule.shift}`}>
+                                    {selectedSchedule.shift === 'off' ? '휴무' : (selectedSchedule.shift === 'morning' ? '오전반' : '오후반')}
+                                    {selectedSchedule.shift !== 'off' && ` (${selectedSchedule.dayType})`}
+                                </span>
+                            </div>
+                            {selectedSchedule.shift !== 'off' && (
+                                <>
+                                    <div className="detail-row">
+                                        <span className="label">노선/순번:</span>
+                                        <span className="value">{selectedSchedule.route}번 / {selectedSchedule.sequence}번</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="label">차량번호:</span>
+                                        <span className="value">{selectedSchedule.vehicleNumber}호</span>
+                                    </div>
+                                    {selectedSchedule.reliefDriver && (
+                                        <div className="detail-row">
+                                            <span className="label">교대자:</span>
+                                            <span className="value">{selectedSchedule.reliefDriver}</span>
+                                        </div>
+                                    )}
+                                    <div className="detail-row">
+                                        <span className="label">근무시간:</span>
+                                        <span className="value highlight-time">{selectedSchedule.startTime} ~ {selectedSchedule.endTime}</span>
+                                    </div>
+                                </>
+                            )}
+                            {selectedSchedule.memo && (
+                                <div className="memo-section">
+                                    <div className="memo-label">메모</div>
+                                    <div className="memo-box">{selectedSchedule.memo}</div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                className="modal-del-btn"
+                                onClick={() => {
+                                    if (window.confirm('이 일정을 삭제하시겠습니까?')) {
+                                        deleteSchedule(selectedSchedule.id);
+                                        setSelectedSchedule(null);
+                                    }
+                                }}
+                            >
+                                <Trash2 size={16} />
+                                삭제하기
+                            </button>
+                            <button className="modal-close-btn" onClick={() => setSelectedSchedule(null)}>닫기</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
