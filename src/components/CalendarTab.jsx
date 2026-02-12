@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, Calendar, FileDown, List, Grid } from 'lucide-react';
+import { Trash2, Calendar, FileDown, List, Grid, Bus } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import './CalendarTab.css';
 
@@ -96,7 +96,12 @@ const CalendarTab = () => {
                 <div className="header-top">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
                         <Calendar className="icon" />
-                        <h1>근무 달력</h1>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <h1>근무 달력</h1>
+                            <span style={{ fontSize: '0.9rem', color: '#6b7280', fontWeight: '500' }}>
+                                오늘: {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                            </span>
+                        </div>
                     </div>
                     <div className="header-actions">
                         <div className="view-toggle">
@@ -152,19 +157,23 @@ const CalendarTab = () => {
                                         {daySchedules.map(s => (
                                             <div key={s.id} className={`event-tag ${s.shift}`}>
                                                 <div className="event-info">
-                                                    <span className="event-route">{s.route}번</span>
-                                                    <span className="event-seq">{s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번</span>
-                                                    {s.vehicleNumber && (
-                                                        <span className="event-vehicle">
-                                                            {s.vehicleNumber}호
-                                                            {s.reliefDriver && ` (${s.reliefDriver})`}
-                                                        </span>
+                                                    {s.shift === 'off' ? (
+                                                        <span className="event-route">휴무</span>
+                                                    ) : (
+                                                        <>
+                                                            <span className="event-route">{s.route}번</span>
+                                                            <span className="event-seq">{s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번</span>
+                                                            {s.vehicleNumber && (
+                                                                <span className="event-vehicle">
+                                                                    {s.vehicleNumber}호
+                                                                    {s.reliefDriver && ` (${s.reliefDriver})`}
+                                                                </span>
+                                                            )}
+                                                            <span className="event-time-display">{s.startTime}~{s.endTime}</span>
+                                                        </>
                                                     )}
-                                                    <span className="event-time-display">{s.startTime}~{s.endTime}</span>
                                                 </div>
-                                                <button className="del-btn" onClick={() => deleteSchedule(s.id)}>
-                                                    <Trash2 size={12} />
-                                                </button>
+                                                {/* 삭제 버튼은 캘린더 형식에서 보이지 않도록 제거 */}
                                             </div>
                                         ))}
                                     </div>
@@ -213,23 +222,44 @@ const CalendarTab = () => {
                                         {events.map(s => (
                                             <div key={s.id} className={`list-event-card ${s.shift}`}>
                                                 <div className="list-card-header">
-                                                    <span className="route-badge">{s.route}번</span>
-                                                    <span className="shift-badge">
-                                                        {s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번
-                                                    </span>
+                                                    {s.shift === 'off' ? (
+                                                        <span className="route-badge" style={{ color: '#4b5563' }}>휴무</span>
+                                                    ) : (
+                                                        <>
+                                                            <span className="route-badge">{s.route}번</span>
+                                                            <span className="shift-badge">
+                                                                {s.shift === 'morning' ? '오전' : '오후'} {s.sequence}번
+                                                            </span>
+                                                        </>
+                                                    )}
                                                 </div>
                                                 <div className="list-card-body">
-                                                    <div className="info-row">
-                                                        <span className="label">차량:</span>
-                                                        <span className="value">
-                                                            {s.vehicleNumber}호
-                                                            {s.reliefDriver && ` (교대: ${s.reliefDriver})`}
-                                                        </span>
-                                                    </div>
-                                                    <div className="info-row">
-                                                        <span className="label">시간:</span>
-                                                        <span className="value">{s.startTime} ~ {s.endTime}</span>
-                                                    </div>
+                                                    {s.shift !== 'off' ? (
+                                                        <>
+                                                            <div className="info-row">
+                                                                <span className="label">차량:</span>
+                                                                <span className="value">
+                                                                    {s.vehicleNumber}호
+                                                                    {s.reliefDriver && ` (교대: ${s.reliefDriver})`}
+                                                                </span>
+                                                            </div>
+                                                            <div className="info-row">
+                                                                <span className="label">시간:</span>
+                                                                <span className="value">{s.startTime} ~ {s.endTime}</span>
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <div className="info-row">
+                                                            <span className="value" style={{ color: '#6b7280' }}>오늘은 휴무일입니다.</span>
+                                                        </div>
+                                                    )}
+
+                                                    {s.memo && (
+                                                        <div className="info-row" style={{ marginTop: '0.25rem', borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '0.25rem' }}>
+                                                            <span className="label">메모:</span>
+                                                            <span className="value">{s.memo}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <button className="list-del-btn" onClick={() => deleteSchedule(s.id)}>
                                                     <Trash2 size={16} />

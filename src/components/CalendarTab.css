@@ -126,6 +126,12 @@
     border-left-color: #ef4444;
 }
 
+.event-tag.off {
+    background: #f3f4f6;
+    color: #374151;
+    border-left-color: #6b7280;
+}
+
 .event-tag {
     font-size: 0.75rem;
     padding: 0.5rem;
@@ -329,6 +335,11 @@
     border-left-color: #ef4444;
 }
 
+.list-event-card.off {
+    background: #f3f4f6;
+    border-left-color: #6b7280;
+}
+
 .list-card-header {
     display: flex;
     flex-direction: column;
@@ -440,6 +451,7 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
+        padding-right: 2rem;
     }
 
     .list-card-body {

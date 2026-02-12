@@ -485,3 +485,43 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* New Styles for Refactored Layout */
+
+.hanil-timetable-container .save-calendar-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #fed7aa;
+    /* Orange tint border */
+}
+
+.hanil-timetable-container .button-group-inline {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.hanil-timetable-container .shift-toggle.three-way {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.hanil-timetable-container .shift-btn {
+    flex: 1;
+}
+
+.hanil-timetable-container .shift-btn.off.active {
+    background: #4b5563 !important;
+    /* Dark Gray */
+    color: white !important;
+}
+
+.hanil-timetable-container .full-width {
+    width: 100%;
+    text-align: left;
+    /* Align text left for memo */
+}
