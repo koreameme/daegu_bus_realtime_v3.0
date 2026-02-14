@@ -7,8 +7,10 @@ const AboutPage = () => {
     return (
         <div className="about-container" style={{ paddingBottom: '140px' }}>
             <div className="info-card">
-                <h1>소개</h1>
-                대구버스 (기사용 - 한일운수)
+                <div className="header">
+                    <Bus className="icon" style={{ width: '1.75rem', height: '1.75rem', verticalAlign: 'middle', color: '#4f46e5' }} />
+                    <h1>대구버스 (기사용 - 한일운수)</h1>
+                </div>
                 <p className="description">
                     이 앱은 대구광역시의 시내버스 실시간 운행 정보를 제공합니다.
                     정류장 별 도착 정보와 노선 별 버스 위치를 확인할 수 있습니다.
