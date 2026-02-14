@@ -23,10 +23,10 @@ const BottomNav = ({ activeTab, onTabChange }) => {
             <style>{`
                 .bottom-nav {
                     position: fixed;
-                    bottom: 50px; /* Shift up for ad */
+                    bottom: 60px; /* Shift up for the 60px ad */
                     left: 0;
                     width: 100%;
-                    height: 80px; /* Increased height */
+                    height: 80px;
                     background: rgba(255, 255, 255, 0.95);
                     backdrop-filter: blur(10px);
                     display: flex;
@@ -34,7 +34,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     align-items: center;
                     border-top: 1px solid rgba(0,0,0,0.1);
                     z-index: 1000;
-                    padding-bottom: 5px; /* Reduced safe area padding since it's above ad */
+                    padding-bottom: 10px;
                 }
                 .nav-item {
                     border: none;

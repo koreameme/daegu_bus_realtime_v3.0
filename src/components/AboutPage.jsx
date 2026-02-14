@@ -1,12 +1,11 @@
 
 import React from 'react';
 import { Info, Smartphone, CheckCircle, Bus } from 'lucide-react';
-import GoogleAd from './GoogleAd';
 import './AboutPage.css';
 
 const AboutPage = () => {
     return (
-        <div className="about-container" style={{ paddingBottom: '130px' }}>
+        <div className="about-container" style={{ paddingBottom: '140px' }}>
             <div className="info-card">
                 <div className="header">
                     <Info className="icon" />
@@ -60,10 +59,6 @@ const AboutPage = () => {
                         <li>달력 뷰(그리드/리스트) 전환 및 실시간 데이터 업데이트</li>
                     </ul>
                 </div>
-            </div>
-
-            <div className="info-card" style={{ marginTop: '1rem', padding: '0' }}>
-                <GoogleAd isFixed={false} />
             </div>
         </div>
     );
