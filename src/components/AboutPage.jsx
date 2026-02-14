@@ -5,7 +5,7 @@ import './AboutPage.css';
 
 const AboutPage = () => {
     return (
-        <div className="about-container" style={{ paddingBottom: '80px' }}>
+        <div className="about-container" style={{ paddingBottom: '130px' }}>
             <div className="info-card">
                 <div className="header">
                     <Info className="icon" />

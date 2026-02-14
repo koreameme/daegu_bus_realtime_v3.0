@@ -32,6 +32,8 @@
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
     /* Ensure vertical scrolling works inside the pane */
+    padding-bottom: 130px;
+    /* Space for Nav (80px) + Ad (50px) */
 }
 
 /* Tab indices: timetable, calendar, realtime, about */

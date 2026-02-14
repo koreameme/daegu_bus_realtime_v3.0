@@ -4,6 +4,7 @@ import BusRouteTracker from './components/BusRouteTracker.jsx';
 import AboutPage from './components/AboutPage.jsx';
 import CalendarTab from './components/CalendarTab.jsx';
 import BottomNav from './components/BottomNav.jsx';
+import GoogleAd from './components/GoogleAd.jsx';
 import './App.css';
 
 function App() {
@@ -85,6 +86,7 @@ function App() {
                 </div>
             </div>
             <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+            <GoogleAd />
         </div>
     );
 }
