@@ -13,7 +13,7 @@ export default defineConfig({
             includeAssets: ['favicon.ico', 'icon.svg'],
             manifest: {
                 name: '대구버스(한일)',
-                short_name: '대구버스',
+                short_name: '대구버스(한일)',
                 id: '/hanil-bus-daegu/',
                 description: '대구 한일 버스 실시간 운행 정보 및 시간표',
                 orientation: 'portrait',
