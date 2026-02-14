@@ -1,0 +1,51 @@
+{
+  "packageId": "io.github.koreameme.twa",
+  "host": "koreameme.github.io",
+  "name": "대구버스 (기사용 - 한일운수)",
+  "shortName": "대구버스 (기사용 - 한일운수)",
+  "launcherName": "대구버스(기사용)",
+  "display": "standalone",
+  "themeColor": "#007AFF",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": true,
+  "startUrl": "/hanil-bus-daegu/",
+  "iconUrl": "https://koreameme.github.io/hanil-bus-daegu/pwa-512.png",
+  "maskableIconUrl": "https://koreameme.github.io/hanil-bus-daegu/icon.svg",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "C:\\Users\\JHL\\daegu_bus_realtime_v2.0\\android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://koreameme.github.io/hanil-bus-daegu/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://koreameme.github.io/hanil-bus-daegu/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [
+    "standalone",
+    "window-controls-overlay"
+  ],
+  "appVersion": "1"
+}

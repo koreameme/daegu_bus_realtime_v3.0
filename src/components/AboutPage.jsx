@@ -9,7 +9,7 @@ const AboutPage = () => {
             <div className="info-card">
                 <div className="header">
                     <Info className="icon" />
-                    <h1>소개</h1>
+                    <h1>대구버스 (기사용 - 한일운수)</h1>
                 </div>
                 <h2 className="app-title">
                     <Bus style={{ width: '1.5rem', height: '1.5rem', verticalAlign: 'middle', marginRight: '0.5rem' }} />
