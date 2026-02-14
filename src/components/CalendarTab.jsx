@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Trash2, Calendar, FileDown, List, Grid, Bus } from 'lucide-react';
+import { Trash2, Calendar, FileDown, List, Grid, Bus, Search, X } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import './CalendarTab.css';
 
@@ -9,6 +9,7 @@ const CalendarTab = () => {
     const [schedules, setSchedules] = useState([]);
     const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list'
     const [selectedSchedule, setSelectedSchedule] = useState(null); // For detail modal
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const loadSchedules = () => {
@@ -67,6 +68,24 @@ const CalendarTab = () => {
         XLSX.writeFile(wb, "버스근무일정.xlsx");
     };
 
+    const filteredSchedules = schedules.filter(s => {
+        if (!searchTerm) return true;
+        const searchLower = searchTerm.toLowerCase();
+
+        // Define localized shift names for searching
+        const shiftName = s.shift === 'morning' ? '오전' : (s.shift === 'afternoon' ? '오후' : '휴무');
+
+        return (
+            s.route?.toString().toLowerCase().includes(searchLower) ||
+            s.vehicleNumber?.toString().toLowerCase().includes(searchLower) ||
+            s.reliefDriver?.toLowerCase().includes(searchLower) ||
+            s.memo?.toLowerCase().includes(searchLower) ||
+            shiftName.includes(searchLower) ||
+            s.sequence?.toString().includes(searchLower) ||
+            s.date?.includes(searchLower)
+        );
+    });
+
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
@@ -106,6 +125,21 @@ const CalendarTab = () => {
                         </div>
                     </div>
                     <div className="header-actions">
+                        <div className="search-container">
+                            <Search className="search-icon" size={18} />
+                            <input
+                                type="text"
+                                className="search-input"
+                                placeholder="노선, 차량, 교대자, 메모 검색..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            {searchTerm && (
+                                <button className="clear-search-btn" onClick={() => setSearchTerm('')}>
+                                    <X size={16} />
+                                </button>
+                            )}
+                        </div>
                         <div className="view-toggle">
                             <button
                                 className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
@@ -150,7 +184,7 @@ const CalendarTab = () => {
 
                         for (let d = 1; d <= totalDays; d++) {
                             const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            const daySchedules = schedules.filter(s => s.date === dateStr);
+                            const daySchedules = filteredSchedules.filter(s => s.date === dateStr);
 
                             days.push(
                                 <div key={d} className="calendar-day">
@@ -196,7 +230,7 @@ const CalendarTab = () => {
                 <div className="calendar-list-view">
                     {(() => {
                         // Filter events for current month
-                        const currentMonthEvents = schedules.filter(s => {
+                        const currentMonthEvents = filteredSchedules.filter(s => {
                             const d = new Date(s.date);
                             return d.getMonth() === currentDate.getMonth() &&
                                 d.getFullYear() === currentDate.getFullYear();
@@ -206,7 +240,18 @@ const CalendarTab = () => {
                         currentMonthEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
 
                         if (currentMonthEvents.length === 0) {
-                            return <div className="no-data">이 달의 근무 일정이 없습니다.</div>;
+                            return (
+                                <div className="no-data">
+                                    {searchTerm ? (
+                                        <>
+                                            <Search size={48} className="empty-icon" />
+                                            <p>'{searchTerm}'에 대한 검색 결과가 없습니다.</p>
+                                        </>
+                                    ) : (
+                                        "이 달의 근무 일정이 없습니다."
+                                    )}
+                                </div>
+                            );
                         }
 
                         // Group by date
