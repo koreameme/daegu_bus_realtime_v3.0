@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Info, Smartphone, CheckCircle, Bus } from 'lucide-react';
+import GoogleAd from './GoogleAd';
 import './AboutPage.css';
 
 const AboutPage = () => {
@@ -61,6 +62,9 @@ const AboutPage = () => {
                 </div>
             </div>
 
+            <div className="info-card" style={{ marginTop: '1rem', padding: '0' }}>
+                <GoogleAd isFixed={false} />
+            </div>
         </div>
     );
 };
