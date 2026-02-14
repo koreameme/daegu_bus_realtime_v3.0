@@ -154,9 +154,9 @@ const CalendarTab = () => {
                                 <Grid size={18} />
                             </button>
                         </div>
-                        <button className="export-btn" onClick={handleExportExcel}>
+                        <button className="export-btn" onClick={handleExportExcel} title="엑셀 저장">
                             <FileDown size={18} />
-                            엑셀 저장
+                            <span>엑셀 저장</span>
                         </button>
                     </div>
                 </div>

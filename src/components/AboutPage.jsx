@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Info, Smartphone, CheckCircle, Bus } from 'lucide-react';
+import { Info, Smartphone, CheckCircle, Bus, User, Mail, Phone, MessageSquare } from 'lucide-react';
 import './AboutPage.css';
 
 const AboutPage = () => {
@@ -58,6 +58,38 @@ const AboutPage = () => {
                         <li>저장된 전체 근무 일정 엑셀(Excel) 파일 내보내기</li>
                         <li>달력 뷰(그리드/리스트) 전환 및 실시간 데이터 업데이트</li>
                     </ul>
+                </div>
+            </div>
+
+            <div className="info-card contact-section">
+                <h3 className="feature-title">
+                    <MessageSquare style={{ width: '1.25rem', height: '1.25rem', color: '#4f46e5' }} />
+                    개발자 문의
+                </h3>
+                <p className="description" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
+                    앱 사용 중 불편한 점이나 제안사항이 있으시면 아래 연락처로 언제든 문의해 주세요.
+                </p>
+                <div className="contact-grid">
+                    <div className="contact-item">
+                        <User className="contact-icon" />
+                        <span className="contact-label">이름 :</span>
+                        <span className="contact-value">Lee ju hwan</span>
+                    </div>
+                    <div className="contact-item">
+                        <Mail className="contact-icon" />
+                        <span className="contact-label">이메일 :</span>
+                        <a href="mailto:smileman54@naver.com" className="contact-value">smileman54@naver.com</a>
+                    </div>
+                    <div className="contact-item">
+                        <Phone className="contact-icon" />
+                        <span className="contact-label">전화번호 :</span>
+                        <a href="tel:010-9912-1887" className="contact-value">010-9912-1887</a>
+                    </div>
+                    <div className="contact-item">
+                        <MessageSquare className="contact-icon" style={{ color: '#f9e000' }} />
+                        <span className="contact-label">카카오톡 ID :</span>
+                        <span className="contact-value">smileman54</span>
+                    </div>
                 </div>
             </div>
         </div>
