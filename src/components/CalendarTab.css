@@ -2,8 +2,8 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
-    padding-bottom: 150px;
-    /* Increased for Nav + Ad */
+    padding-bottom: 140px;
+    /* Space for Nav + Ad */
 }
 
 .calendar-header {
@@ -479,7 +479,7 @@
 @media (max-width: 768px) {
     .calendar-tab-container {
         padding: 0.5rem;
-        padding-bottom: 80px;
+        padding-bottom: 140px;
     }
 
     .calendar-header {

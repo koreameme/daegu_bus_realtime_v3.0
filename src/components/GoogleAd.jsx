@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const GoogleAd = ({ isFixed = true }) => {
+const GoogleAd = () => {
     useEffect(() => {
         try {
             (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -9,36 +9,30 @@ const GoogleAd = ({ isFixed = true }) => {
         }
     }, []);
 
-    const adStyle = isFixed ? {
-        zIndex: 1001,
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        background: '#f8f9fa',
-    } : {
-        margin: '20px 0',
-        background: '#fff',
-        borderRadius: '8px',
-        padding: '10px'
-    };
-
     return (
         <div
-            className={`ad-container ${isFixed ? 'fixed' : 'inline'}`}
+            className="ad-container fixed-bottom-banner"
             style={{
                 width: '100%',
+                height: '50px',
                 textAlign: 'center',
-                minHeight: '60px',
-                ...adStyle
+                background: '#f8f9fa',
+                zIndex: 990, // Lower than BottomNav (1000)
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                borderTop: '1px solid #e2e8f0'
             }}
         >
             <ins className="adsbygoogle"
-                style={{ display: 'block' }}
+                style={{ display: 'inline-block', width: '100%', height: '40px' }}
                 data-ad-client="ca-pub-8780669609800607"
-                data-ad-slot="4685750113"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <span style={{ fontSize: '10px', color: '#999', display: 'block' }}>ADVERTISEMENT</span>
+                data-ad-slot="4685750113"></ins>
+            <span style={{ fontSize: '9px', color: '#999', display: 'block', lineHeight: '10px' }}>ADVERTISEMENT</span>
         </div>
     );
 };

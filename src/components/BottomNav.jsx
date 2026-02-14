@@ -23,7 +23,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
             <style>{`
                 .bottom-nav {
                     position: fixed;
-                    bottom: 60px; /* Shift up for the 60px ad */
+                    bottom: 50px; /* Positioned directly above the 50px ad */
                     left: 0;
                     width: 100%;
                     height: 80px;
@@ -33,7 +33,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     justify-content: space-around;
                     align-items: center;
                     border-top: 1px solid rgba(0,0,0,0.1);
-                    z-index: 1000;
+                    z-index: 1000; /* Higher than GoogleAd */
                     padding-bottom: 10px;
                 }
                 .nav-item {
