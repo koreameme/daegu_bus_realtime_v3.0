@@ -26,7 +26,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     bottom: 50px; /* Positioned directly above the 50px ad */
                     left: 0;
                     width: 100%;
-                    height: 80px;
+                    height: 60px;
                     background: rgba(255, 255, 255, 0.95);
                     backdrop-filter: blur(10px);
                     display: flex;
@@ -34,7 +34,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     align-items: center;
                     border-top: 1px solid rgba(0,0,0,0.1);
                     z-index: 1000; /* Higher than GoogleAd */
-                    padding-bottom: 10px;
+                    padding-bottom: 0;
                 }
                 .nav-item {
                     border: none;
@@ -45,7 +45,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     gap: 6px; /* Increased gap */
                     color: #8e8e93;
                     cursor: pointer;
-                    padding: 8px;
+                    padding: 4px;
                     transition: all 0.2s ease;
                 }
                 .nav-item.active {
@@ -53,10 +53,10 @@ const BottomNav = ({ activeTab, onTabChange }) => {
                     transform: translateY(-2px);
                 }
                 .nav-icon {
-                    font-size: 1.6rem; /* Larger icons */
+                    font-size: 1.4rem; /* Smaller icons */
                 }
                 .nav-label {
-                    font-size: 0.8rem; /* Larger text */
+                    font-size: 0.75rem; /* Smaller text */
                     font-weight: 600;
                 }
             `}</style>

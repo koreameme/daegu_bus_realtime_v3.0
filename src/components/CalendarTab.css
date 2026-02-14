@@ -502,7 +502,7 @@
 @media (max-width: 768px) {
     .calendar-tab-container {
         padding: 0.5rem;
-        padding-bottom: 140px;
+        padding-bottom: 120px;
     }
 
     .calendar-header {
