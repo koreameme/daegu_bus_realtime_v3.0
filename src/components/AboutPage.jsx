@@ -72,22 +72,22 @@ const AboutPage = () => {
                 <div className="contact-grid">
                     <div className="contact-item">
                         <User className="contact-icon" />
-                        <span className="contact-label">이름 :</span>
+                        <span className="contact-label">이름 : </span>
                         <span className="contact-value">Lee ju hwan</span>
                     </div>
                     <div className="contact-item">
                         <Mail className="contact-icon" />
-                        <span className="contact-label">이메일 :</span>
+                        <span className="contact-label">이메일 : </span>
                         <a href="mailto:smileman54@naver.com" className="contact-value">smileman54@naver.com</a>
                     </div>
                     <div className="contact-item">
                         <Phone className="contact-icon" />
-                        <span className="contact-label">전화번호 :</span>
+                        <span className="contact-label">전화번호 : </span>
                         <a href="tel:010-9912-1887" className="contact-value">010-9912-1887</a>
                     </div>
                     <div className="contact-item">
                         <MessageSquare className="contact-icon" style={{ color: '#f9e000' }} />
-                        <span className="contact-label">카카오톡 ID :</span>
+                        <span className="contact-label">카카오톡 ID : </span>
                         <span className="contact-value">smileman54</span>
                     </div>
                 </div>
