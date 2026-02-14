@@ -311,10 +311,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    /* Icon only for mobile/compact row */
     height: 2.25rem;
-    padding: 0;
+    padding: 0 0.75rem;
+    gap: 0.4rem;
     background: #10b981;
     color: white;
     border: none;
@@ -325,20 +324,18 @@
 }
 
 .export-btn span {
-    display: none;
-    /* Hide text to save space in row */
+    display: inline;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
 
 @media (min-width: 769px) {
     .export-btn {
-        width: auto;
-        padding: 0 0.75rem;
+        padding: 0 1rem;
         gap: 0.5rem;
     }
 
     .export-btn span {
-        display: inline;
-        font-weight: 500;
         font-size: 0.875rem;
     }
 }
@@ -535,8 +532,12 @@
     }
 
     .export-btn {
-        width: 2.25rem;
-        justify-content: center;
+        padding: 0 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .export-btn span {
+        font-size: 0.7rem;
     }
 
     .list-day-group {
