@@ -4,8 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: '/hanil-bus-daegu/',
-    plugins: [
+    base: '/daegu_bus_realtime_v3.0/',    plugins: [
         react(),
         VitePWA({
             registerType: 'autoUpdate',
@@ -14,8 +13,7 @@ export default defineConfig({
             manifest: {
                 name: '대구버스 (기사용 - 한일운수)',
                 short_name: '대구버스 (기사용 - 한일운수)',
-                id: '/hanil-bus-daegu/',
-                description: '대구 한일 버스 실시간 운행 정보 및 시간표',
+                id: '/daegu_bus_realtime_v3.0/',                description: '대구 한일 버스 실시간 운행 정보 및 시간표',
                 orientation: 'portrait',
                 theme_color: '#007aff',
                 background_color: '#ffffff',
