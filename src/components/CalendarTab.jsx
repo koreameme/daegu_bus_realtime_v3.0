@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Trash2, Calendar, FileDown, List, Grid, Bus, Search, X } from 'lucide-react';
+import { Trash2, Calendar, FileDown, FileUp, List, Grid, Bus, Search, X, Edit2, Check, Save } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import './CalendarTab.css';
 
@@ -9,7 +9,10 @@ const CalendarTab = () => {
     const [schedules, setSchedules] = useState([]);
     const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list'
     const [selectedSchedule, setSelectedSchedule] = useState(null); // For detail modal
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setEditData] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const importInputRef = React.useRef(null);
 
     useEffect(() => {
         const loadSchedules = () => {
@@ -47,16 +50,20 @@ const CalendarTab = () => {
             return;
         }
 
-        const dataToExport = schedules.map(s => ({
-            '날짜': s.date,
-            '노선': `${s.route}번`,
-            '근무': s.shift === 'morning' ? '오전반' : '오후반',
-            '순번': s.sequence,
-            '차량번호': s.vehicleNumber ? `19${s.vehicleNumber.replace('19', '')}` : '',
-            '교대자': s.reliefDriver || '',
-            '시작 시간': s.startTime,
-            '종료 시간': s.endTime
-        }));
+        const dataToExport = schedules.map(s => {
+            const isOff = s.shift === 'off';
+            return {
+                '날짜': s.date,
+                '노선': isOff ? '휴무' : `${s.route}번`,
+                '근무': isOff ? '' : (s.shift === 'morning' ? '오전반' : '오후반'),
+                '순번': isOff ? '' : (s.sequence || ''),
+                '차량번호': isOff ? '' : (s.vehicleNumber ? (s.vehicleNumber.startsWith('19') ? s.vehicleNumber : `19${s.vehicleNumber}`) : ''),
+                '교대자': isOff ? '' : (s.reliefDriver || ''),
+                '시작 시간': isOff ? '' : (s.startTime || ''),
+                '종료 시간': isOff ? '' : (s.endTime || ''),
+                '메모': s.memo || ''
+            };
+        });
 
         // Sort by date
         dataToExport.sort((a, b) => new Date(a['날짜']) - new Date(b['날짜']));
@@ -66,6 +73,94 @@ const CalendarTab = () => {
         XLSX.utils.book_append_sheet(wb, ws, "근무일정");
 
         XLSX.writeFile(wb, "버스근무일정.xlsx");
+    };
+
+    const handleImportExcel = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            if (jsonData.length === 0) {
+                alert('엑셀 파일에 데이터가 없습니다.');
+                return;
+            }
+
+            const currentSchedules = [...schedules];
+            let addedCount = 0;
+            let skippedCount = 0;
+
+            const newSchedules = jsonData.map(row => {
+                // Map localized keys to internal keys
+                const date = row['날짜'];
+                const route = row['노선']?.toString().replace('번', '');
+                const shiftStr = row['근무'];
+                const shiftMap = { '오전반': 'morning', '오후반': 'afternoon', '휴무': 'off' };
+                const shift = shiftMap[shiftStr] || (shiftStr === 'morning' ? 'morning' : (shiftStr === 'afternoon' ? 'afternoon' : 'off'));
+
+                // Duplicate check: date + route + shift
+                const isDuplicate = currentSchedules.some(s =>
+                    s.date === date &&
+                    s.route?.toString() === route?.toString() &&
+                    s.shift === shift
+                );
+
+                if (isDuplicate) {
+                    skippedCount++;
+                    return null;
+                }
+
+                addedCount++;
+                return {
+                    id: Date.now() + Math.random(),
+                    date: date,
+                    route: route,
+                    shift: shift,
+                    sequence: row['순번'],
+                    vehicleNumber: row['차량번호']?.toString().replace('19', ''),
+                    reliefDriver: row['교대자'],
+                    startTime: row['시작 시간'],
+                    endTime: row['종료 시간'],
+                    memo: row['메모'] || '',
+                    dayType: row['근무'] === '휴무' ? '휴무' : (new Date(date).getDay() === 0 ? '휴일' : (new Date(date).getDay() === 6 ? '토요일' : '평일'))
+                };
+            }).filter(s => s !== null);
+
+            if (addedCount > 0) {
+                const updated = [...currentSchedules, ...newSchedules];
+                localStorage.setItem('busSchedules', JSON.stringify(updated));
+                setSchedules(updated);
+                window.dispatchEvent(new Event('busScheduleUpdated'));
+                alert(`${addedCount}건의 일정이 추가되었습니다. (중복 ${skippedCount}건 제외)`);
+            } else {
+                alert(`추가할 새로운 일정이 없습니다. (중복 ${skippedCount}건 제외)`);
+            }
+            e.target.value = ''; // Reset input
+        };
+        reader.readAsArrayBuffer(file);
+    };
+
+    const handleUpdateSchedule = () => {
+        if (!editData) return;
+
+        const updated = schedules.map(s => s.id === editData.id ? editData : s);
+        localStorage.setItem('busSchedules', JSON.stringify(updated));
+        setSchedules(updated);
+        setSelectedSchedule(editData);
+        setIsEditing(false);
+        window.dispatchEvent(new Event('busScheduleUpdated'));
+        alert('일정이 수정되었습니다.');
+    };
+
+    const startEditing = () => {
+        setEditData({ ...selectedSchedule });
+        setIsEditing(true);
     };
 
     const filteredSchedules = schedules.filter(s => {
@@ -154,10 +249,23 @@ const CalendarTab = () => {
                                 <Grid size={18} />
                             </button>
                         </div>
-                        <button className="export-btn" onClick={handleExportExcel} title="엑셀 저장">
-                            <FileDown size={18} />
-                            <span>엑셀 저장</span>
-                        </button>
+                        <div className="excel-actions">
+                            <button className="import-btn" onClick={() => importInputRef.current?.click()} title="엑셀 불러오기">
+                                <FileUp size={18} />
+                                <span>불러오기</span>
+                            </button>
+                            <button className="export-btn" onClick={handleExportExcel} title="엑셀 저장">
+                                <FileDown size={18} />
+                                <span>저장</span>
+                            </button>
+                            <input
+                                type="file"
+                                ref={importInputRef}
+                                style={{ display: 'none' }}
+                                accept=".xlsx, .xls"
+                                onChange={handleImportExcel}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -357,62 +465,154 @@ const CalendarTab = () => {
                             <button className="close-btn" onClick={() => setSelectedSchedule(null)}>&times;</button>
                         </div>
                         <div className="modal-body">
-                            <div className="detail-row">
-                                <span className="label">날짜:</span>
-                                <span className="value">
-                                    {new Date(selectedSchedule.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
-                                </span>
-                            </div>
-                            <div className="detail-row">
-                                <span className="label">구분:</span>
-                                <span className={`value-badge ${selectedSchedule.shift}`}>
-                                    {selectedSchedule.shift === 'off' ? '휴무' : (selectedSchedule.shift === 'morning' ? '오전반' : '오후반')}
-                                    {selectedSchedule.shift !== 'off' && ` (${selectedSchedule.dayType})`}
-                                </span>
-                            </div>
-                            {selectedSchedule.shift !== 'off' && (
+                            {isEditing ? (
+                                <div className="edit-form">
+                                    <div className="edit-row">
+                                        <label>날짜</label>
+                                        <input type="date" value={editData.date} disabled />
+                                    </div>
+                                    <div className="edit-row">
+                                        <label>노선/순번</label>
+                                        <div className="input-group">
+                                            <input
+                                                type="number"
+                                                value={editData.route}
+                                                onChange={e => setEditData({ ...editData, route: e.target.value })}
+                                                placeholder="노선"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={editData.sequence}
+                                                onChange={e => setEditData({ ...editData, sequence: e.target.value })}
+                                                placeholder="순번"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="edit-row">
+                                        <label>차량번호 (뒷4자리)</label>
+                                        <input
+                                            type="text"
+                                            value={editData.vehicleNumber}
+                                            onChange={e => setEditData({ ...editData, vehicleNumber: e.target.value })}
+                                            placeholder="예: 1234"
+                                        />
+                                    </div>
+                                    <div className="edit-row">
+                                        <label>교대자</label>
+                                        <input
+                                            type="text"
+                                            value={editData.reliefDriver || ''}
+                                            onChange={e => setEditData({ ...editData, reliefDriver: e.target.value })}
+                                            placeholder="교대자 이름"
+                                        />
+                                    </div>
+                                    <div className="edit-row">
+                                        <label>근무시간</label>
+                                        <div className="input-group">
+                                            <input
+                                                type="text"
+                                                value={editData.startTime}
+                                                onChange={e => setEditData({ ...editData, startTime: e.target.value })}
+                                                placeholder="00:00"
+                                            />
+                                            <span>~</span>
+                                            <input
+                                                type="text"
+                                                value={editData.endTime}
+                                                onChange={e => setEditData({ ...editData, endTime: e.target.value })}
+                                                placeholder="00:00"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="edit-row">
+                                        <label>메모</label>
+                                        <textarea
+                                            value={editData.memo || ''}
+                                            onChange={e => setEditData({ ...editData, memo: e.target.value })}
+                                            placeholder="근무 관련 메모를 입력하세요 (예: 세차일, 오일교환 등)"
+                                            rows={3}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
                                 <>
                                     <div className="detail-row">
-                                        <span className="label">노선/순번:</span>
-                                        <span className="value">{selectedSchedule.route}번 / {selectedSchedule.sequence}번</span>
+                                        <span className="label">날짜:</span>
+                                        <span className="value">
+                                            {new Date(selectedSchedule.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
+                                        </span>
                                     </div>
                                     <div className="detail-row">
-                                        <span className="label">차량번호:</span>
-                                        <span className="value">{selectedSchedule.vehicleNumber}호</span>
+                                        <span className="label">구분:</span>
+                                        <span className={`value-badge ${selectedSchedule.shift}`}>
+                                            {selectedSchedule.shift === 'off' ? '휴무' : (selectedSchedule.shift === 'morning' ? '오전반' : '오후반')}
+                                            {selectedSchedule.shift !== 'off' && ` (${selectedSchedule.dayType})`}
+                                        </span>
                                     </div>
-                                    {selectedSchedule.reliefDriver && (
-                                        <div className="detail-row">
-                                            <span className="label">교대자:</span>
-                                            <span className="value">{selectedSchedule.reliefDriver}</span>
+                                    {selectedSchedule.shift !== 'off' && (
+                                        <>
+                                            <div className="detail-row">
+                                                <span className="label">노선/순번:</span>
+                                                <span className="value">{selectedSchedule.route}번 / {selectedSchedule.sequence}번</span>
+                                            </div>
+                                            <div className="detail-row">
+                                                <span className="label">차량번호:</span>
+                                                <span className="value">{selectedSchedule.vehicleNumber}호</span>
+                                            </div>
+                                            {selectedSchedule.reliefDriver && (
+                                                <div className="detail-row">
+                                                    <span className="label">교대자:</span>
+                                                    <span className="value">{selectedSchedule.reliefDriver}</span>
+                                                </div>
+                                            )}
+                                            <div className="detail-row">
+                                                <span className="label">근무시간:</span>
+                                                <span className="value highlight-time">{selectedSchedule.startTime} ~ {selectedSchedule.endTime}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                    {selectedSchedule.memo && (
+                                        <div className="memo-section">
+                                            <div className="memo-label">메모</div>
+                                            <div className="memo-box">{selectedSchedule.memo}</div>
                                         </div>
                                     )}
-                                    <div className="detail-row">
-                                        <span className="label">근무시간:</span>
-                                        <span className="value highlight-time">{selectedSchedule.startTime} ~ {selectedSchedule.endTime}</span>
-                                    </div>
                                 </>
-                            )}
-                            {selectedSchedule.memo && (
-                                <div className="memo-section">
-                                    <div className="memo-label">메모</div>
-                                    <div className="memo-box">{selectedSchedule.memo}</div>
-                                </div>
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button
-                                className="modal-del-btn"
-                                onClick={() => {
-                                    if (window.confirm('이 일정을 삭제하시겠습니까?')) {
-                                        deleteSchedule(selectedSchedule.id);
+                            {isEditing ? (
+                                <>
+                                    <button className="modal-save-btn" onClick={handleUpdateSchedule}>
+                                        <Save size={16} />
+                                        저장하기
+                                    </button>
+                                    <button className="modal-close-btn" onClick={() => setIsEditing(false)}>취소</button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="modal-edit-btn" onClick={startEditing}>
+                                        <Edit2 size={16} />
+                                        수정하기
+                                    </button>
+                                    <button
+                                        className="modal-del-btn"
+                                        onClick={() => {
+                                            if (window.confirm('이 일정을 삭제하시겠습니까?')) {
+                                                deleteSchedule(selectedSchedule.id);
+                                                setSelectedSchedule(null);
+                                            }
+                                        }}
+                                    >
+                                        <Trash2 size={16} />
+                                        삭제하기
+                                    </button>
+                                    <button className="modal-close-btn" onClick={() => {
                                         setSelectedSchedule(null);
-                                    }
-                                }}
-                            >
-                                <Trash2 size={16} />
-                                삭제하기
-                            </button>
-                            <button className="modal-close-btn" onClick={() => setSelectedSchedule(null)}>닫기</button>
+                                        setIsEditing(false);
+                                    }}>닫기</button>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>,
